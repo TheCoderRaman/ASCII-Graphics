@@ -8,19 +8,11 @@
     0x000000ff, 0x00ff00ff, 0x0000ffff, 0x00ffffff
   };
 
-/******************************************************************************
-  windowsVersionTest
-
-  Checks to see if have Vista/7 or earlier by attempting to retrieve function
-  from kernel32.dll that is only available in Vista+ version of Windows.
-******************************************************************************/
 int windowsVersionTest(void)
 {
-    /* Retrieving pointers for Windows Vista/7 Functions */
   PGetCurrentConsoleFontEx pGetCurrentConsoleFontEx = (PGetCurrentConsoleFontEx)
     GetProcAddress(GetModuleHandle("kernel32.dll"), "GetCurrentConsoleFontEx");
 
-    /* If exists then we have Vita/7 */
   if (pGetCurrentConsoleFontEx)
   {
     return 1;
@@ -30,18 +22,11 @@ int windowsVersionTest(void)
     return 0;
   }
 }
-
-/******************************************************************************
-  SetConsolePalette
-
-  Sets the console palette and font size.
-******************************************************************************/
 VOID WINAPI SetConsolePalette(COLORREF palette[], int fontX, int fontY, wchar_t *fontName)
 {
   int i;
   HANDLE hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    /* Retrieving pointers for Windows Vista/7 Functions */
   PGetCurrentConsoleFontEx pGetCurrentConsoleFontEx = (PGetCurrentConsoleFontEx)
     GetProcAddress(GetModuleHandle("kernel32.dll"), "GetCurrentConsoleFontEx");
   PSetCurrentConsoleFontEx pSetCurrentConsoleFontEx = (PSetCurrentConsoleFontEx)
@@ -125,11 +110,6 @@ VOID WINAPI SetConsolePalette(COLORREF palette[], int fontX, int fontY, wchar_t 
   }
 }
 
-/******************************************************************************
-  GetConsoleSizeInfo (XP only)
-
-  Fills up some info about the console font in the CONSOLE_INFO struct.
-******************************************************************************/
 static void GetConsoleSizeInfo(CONSOLE_INFO *pci, HANDLE hOutput)
 {
   CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -142,11 +122,6 @@ static void GetConsoleSizeInfo(CONSOLE_INFO *pci, HANDLE hOutput)
   pci->WindowPosY = csbi.srWindow.Top;
 }
 
-/******************************************************************************
-  SetConsoleInfo (XP only)
-
-  Ends up sending a message to windows to reset the console info.
-******************************************************************************/
 BOOL SetConsoleInfo(HWND hwndConsole, CONSOLE_INFO *pci)
 {
   DWORD dwConsoleOwnerPid;
